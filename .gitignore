@@ -1,0 +1,14 @@
+﻿# NetBeans specific
+nbproject/private/
+nbproject/Makefile-*.mk
+nbproject/Package-*.bash
+build/
+dist/
+nbbuild/
+nbdist/
+.nb-gradle/
+manifest.mf
+
+# OS files
+.DS_Store
+Thumbs.db
