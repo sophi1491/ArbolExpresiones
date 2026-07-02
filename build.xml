@@ -70,4 +70,15 @@
     nbproject/build-impl.xml file. 
 
     -->
+<target name="-post-compile">
+    <copy todir="${build.classes.dir}/arbolE">
+        <fileset dir="${src.dir}/arbolE">
+            <include name="**/*.jpeg"/>
+            <include name="**/*.jpg"/>
+            <include name="**/*.png"/>
+            <include name="**/*.gif"/>
+        </fileset>
+    </copy>
+</target>
+
 </project>

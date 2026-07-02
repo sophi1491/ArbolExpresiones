@@ -327,6 +327,14 @@ public class FrameInterfaz extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
+         String datos = "";
+    // temp = 0;
+    Arbol a = new Arbol();
+    datos = jTextField1.getText();
+
+    Nodo arbolExpresion = a.crear(datos);
+    jTextArea1.append(a.getReglasEjecutadas());
+        
     }//GEN-LAST:event_jButton1ActionPerformed
 
     /**

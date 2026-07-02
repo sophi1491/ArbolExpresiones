@@ -72,7 +72,7 @@ public class FramePrincipal extends javax.swing.JFrame {
         jLabel10.setIcon(new javax.swing.ImageIcon(getClass().getResource("/arbolE/peque.png"))); // NOI18N
         jLabel10.setText("jLabel10");
 
-        pato.setIcon(new javax.swing.ImageIcon("C:\\Users\\sophi\\TEC\\VERANO2026\\AUTOMATAS2\\PROYECTO_ARBOL\\ArbolExpresiones\\src\\arbolE\\logo.jpeg")); // NOI18N
+        pato.setIcon(new javax.swing.ImageIcon(getClass().getResource("/arbolE/logo.jpeg"))); // NOI18N
         pato.setText("jLabel9");
         pato.setPreferredSize(new java.awt.Dimension(100, 100));
 

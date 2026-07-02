@@ -31,11 +31,11 @@ public class Nodo {
     public Nodo(String dato) {
         this.dato = dato;
     }
-    public Nodo(String dato, Nodo izquierdo, Nodo derecho) {
+    public Nodo(String dato, Nodo izquierdo,Nodo derecho) {
         this.dato = dato;
-        this.padre = null;
         this.izquierdo = izquierdo;
         this.derecho = derecho;
+        this.padre = null;
         this.codigoIntermedio = "";
         this.lugar = "";
     }
