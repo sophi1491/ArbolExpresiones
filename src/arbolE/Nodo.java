@@ -20,25 +20,28 @@ package arbolE;
 
 public class Nodo {
     
-    // Atributos 
-    private String dato;
-    private Nodo padre;
-    private Nodo izquierdo;
-    private Nodo derecho;
-    private String codigoIntermedio;
-    private String lugar; //para los temporales 
-
-    public Nodo(String dato) {
+    // Atributos
+        private String dato;
+        private Nodo padre;
+        private Nodo izquierdo;
+        private Nodo derecho;
+        
+        
+        private String codigoIntermedio; //
+        private String lugar; // Para los temporales
+        
+    public Nodo(String dato){ //Información
         this.dato = dato;
-    }
-    public Nodo(String dato, Nodo izquierdo,Nodo derecho) {
+    }// Constructor
+
+    public Nodo(String dato, Nodo izquierdo, Nodo derecho) {
         this.dato = dato;
         this.izquierdo = izquierdo;
         this.derecho = derecho;
         this.padre = null;
         this.codigoIntermedio = "";
         this.lugar = "";
-    }
+    }// Constructor
 
     public String getDato() {
         return dato;
@@ -87,8 +90,6 @@ public class Nodo {
     public void setLugar(String lugar) {
         this.lugar = lugar;
     }
-    
-   
     
     
 }

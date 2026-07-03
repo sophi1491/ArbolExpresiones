@@ -19,7 +19,7 @@ public class Arbol {
     Stack<String> caracter;
      //Identificar entre operador y operandos 
     final String espacios = "\t";
-    final String aritmeticos = "+-*()^=";
+    final String aritmeticos = "+-*/()^=";
     final String variables = "abcdefghijklmnopqrstuvwxyz";
     final String opMultiplica  = "*";
     private Nodo raiz;
@@ -41,7 +41,7 @@ ArrayList <String> reglasEjecutadas;
 
 //Construtor
 public Arbol(){
-reglasEjecutadas = new ArrayList<String>(); 
+reglasEjecutadas = new ArrayList<>(); 
 tablaSimbolos = new HashMap();
 erroresSemanticos = new HashMap();
 producciones = new HashMap();
@@ -49,7 +49,7 @@ producciones = new HashMap();
 ArbolNodo = new Stack<Nodo>();
 caracter = new Stack<String>();
 
-
+paso =0;
 } // fin - constructor
 
 
@@ -103,7 +103,7 @@ public void guardar(){
 	reglasEjecutadas.add("p"+paso+" "+reglaE);
 	}
         if (operador.equals("/")){
-	String reglaE = "E.nodo = new Nodo (/, E1.nodo, T.nodo)";
+	String reglaE = "E.nodo = new Nodo (/, E1.nodo, T.nodo)";   
 	reglasEjecutadas.add("p"+paso+" "+reglaE);
 	}
 }// fin - guardar
@@ -112,15 +112,17 @@ public void guardar(){
 // metodo de nodo
 
 public Nodo crear (String expresion){
-	//0. Inicializar valores para varias ejecuciones
 	
-	paso = 0;
 	
 	// 1. Considerar al expresión como un conjunto de tokens
 
 	StringTokenizer tokenizer;
 	String token;
-
+        
+        //0. Inicializar valores para varias ejecuciones
+	
+	paso = 0;
+        
 	//StringTokenizer es una clase del paquete java.util que permite dividir 
 	//una cadena de texto (String) en partes más pequeñas llamadas tokens.
 
@@ -134,31 +136,36 @@ public Nodo crear (String expresion){
 		// 4. Omitir espacios en blanco 
 		token = tokenizer.nextToken();
 		System.out.println(" Token "+token);
-		if(espacios.indexOf(token)>=0){
+		if(espacios.indexOf(token) >=0 ){
 		// 5. Se trata de un identificador 
-			System.out.println("Se trata de un identificador ");
-		}else if (aritmeticos.indexOf(token)<0){
+			System.out.println("Omitiendo espacios");
+		}else if (aritmeticos.indexOf(token) < 0){
 		 // 6. Extrae de la pila los términos que estaba 
 			ArbolNodo.push(new Nodo(token));
 			paso++;
-                        //reglasEjecutadas.add("p" + paso + " T.nodo = new Nodo(" + token + ")");
+                        String regla = "T.nodo = new Hoja(id<"+token+">,id.entrada_"+token+") ";
+                        reglasEjecutadas.add("p" + paso + " "+regla);
+                        
 			}else if(token.equals(")")){
 					while(!caracter.empty() && !caracter.peek().equals("(")){
 					guardar();
-						if(!caracter.empty())
-						System.out.println("");
+						
 					}// fin while
 					
 					caracter.pop();
 				}// fin else if
                         else{
                             if(!token.equals("(") && !caracter.empty()){
+                                
                                 String exa = (String) caracter.peek();
-                                 while(!exa.equals("(") && caracter.empty() && 
+                                //System.out.println("Entra aqui !!"+token);
+                                 while(!exa.equals("(") && !caracter.empty() && 
                                          aritmeticos.indexOf(exa) >= aritmeticos.indexOf(token)){
                                      guardar();
+                                     
                                      if (!caracter.empty()){
                                          exa = (String) caracter.peek();
+                                         
                                      }// fin if !caracter
                                  }// fin while !exa
                             }//fin if token
@@ -176,7 +183,5 @@ public Nodo crear (String expresion){
            }// fin while !caracter.empty
            return raiz;
 	} // fin metodo crear
-
-	
   
 }

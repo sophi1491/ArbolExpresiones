@@ -329,11 +329,12 @@ public class FrameInterfaz extends javax.swing.JFrame {
         // TODO add your handling code here:
          String datos = "";
     // temp = 0;
-    Arbol a = new Arbol();
+    //Arbol a = new Arbol();
+    ArbolSophia arbolsophia = new ArbolSophia();
     datos = jTextField1.getText();
 
-    Nodo arbolExpresion = a.crear(datos);
-    jTextArea1.append(a.getReglasEjecutadas());
+    Nodo arbolExpresion = arbolsophia.crear(datos);
+    jTextArea1.append(arbolsophia.getReglasEjecutadas());
         
     }//GEN-LAST:event_jButton1ActionPerformed
 
