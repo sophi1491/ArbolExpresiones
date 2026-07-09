@@ -6,6 +6,7 @@ package arbolE;
 
 import java.awt.Image;
 import javax.swing.ImageIcon;
+import javax.swing.JFrame;
 
 /**
  *
@@ -16,11 +17,16 @@ public class FrameInterfaz extends javax.swing.JFrame {
     /**
      * Creates new form FrameInterfaz
      */
+    FrameColorNodos arbolColor;
+     public String datos ;
     
-    
-    
+     
+   
+     
     public FrameInterfaz() {
         initComponents();
+        
+        arbolColor = new FrameColorNodos();
         
         
         java.net.URL url2 = getClass().getResource("/arbolE/yo.jpeg"); 
@@ -44,6 +50,13 @@ public class FrameInterfaz extends javax.swing.JFrame {
         pato.setIcon(new ImageIcon(imagenEscalada3));
     }
 
+    
+    public String cadena(String datos){
+        datos = jTextField1.getText();
+        return datos;
+    }
+    
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -84,6 +97,7 @@ public class FrameInterfaz extends javax.swing.JFrame {
         jLabel3 = new javax.swing.JLabel();
         jScrollPane5 = new javax.swing.JScrollPane();
         jTextArea5 = new javax.swing.JTextArea();
+        jButton5 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -196,6 +210,11 @@ public class FrameInterfaz extends javax.swing.JFrame {
         jPanel2.setBackground(new java.awt.Color(255, 255, 255));
 
         jTextField1.setBackground(new java.awt.Color(255, 255, 153));
+        jTextField1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTextField1ActionPerformed(evt);
+            }
+        });
 
         jButton1.setText("Compila");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
@@ -227,6 +246,13 @@ public class FrameInterfaz extends javax.swing.JFrame {
         jTextArea5.setRows(5);
         jScrollPane5.setViewportView(jTextArea5);
 
+        jButton5.setText("Agente IA");
+        jButton5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton5ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -249,9 +275,11 @@ public class FrameInterfaz extends javax.swing.JFrame {
                         .addComponent(jLabel3)
                         .addGap(31, 31, 31)
                         .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 453, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(57, 57, 57)
-                        .addComponent(jButton1)))
-                .addGap(9, 9, 9))
+                        .addGap(18, 18, 18)
+                        .addComponent(jButton1)
+                        .addGap(32, 32, 32)
+                        .addComponent(jButton5)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -260,7 +288,8 @@ public class FrameInterfaz extends javax.swing.JFrame {
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButton1)
-                    .addComponent(jLabel3))
+                    .addComponent(jLabel3)
+                    .addComponent(jButton5))
                 .addGap(18, 27, Short.MAX_VALUE)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.TRAILING)
@@ -338,6 +367,45 @@ public class FrameInterfaz extends javax.swing.JFrame {
         
     }//GEN-LAST:event_jButton1ActionPerformed
 
+    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
+        // TODO add your handling code here:
+        
+        /*String datos = "";
+        
+        
+        ArbolIa arbol = new ArbolIa();
+        
+        datos = jTextField1.getText();
+        
+         Nodo arbolExpresi = arbol.crear(datos);
+         jTextArea1.append(arbol.getReglasEjecutadas());
+         
+         
+         JFrame ventana = new JFrame("Vizualizador de Arboles - LyA2");
+         PanelArbol panel = new PanelArbol(arbolExpresi);
+         
+         ventana.add(panel);
+         ventana.setSize(600,400);
+         ventana.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+         ventana.setLocationRelativeTo(null);
+         ventana.setVisible(true);*/
+       
+        
+        arbolColor.setVisible(true);
+        
+        ArbolIa arbol = new ArbolIa();
+        
+        
+        
+         jTextArea1.append(arbol.getReglasEjecutadas());
+        
+        
+    }//GEN-LAST:event_jButton5ActionPerformed
+
+    private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTextField1ActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -378,6 +446,7 @@ public class FrameInterfaz extends javax.swing.JFrame {
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
+    private javax.swing.JButton jButton5;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel2;
