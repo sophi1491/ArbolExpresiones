@@ -16,22 +16,21 @@ public class FrameColorNodos extends javax.swing.JFrame {
 
     int anchoLineas = 0 ;
     int anchoNodos = 0;
-    JColorChooser colorLineasChooser = new JColorChooser();
-    JColorChooser colorNodosChooser = new JColorChooser();
     public  String datos;
-    FrameInterfaz cadenas;
-    
-    
+
     /**
      * Creates new form FrameColorNodos
      */
-    public FrameColorNodos(String datos) {
-        this.datos = cadenas.cadena(datos);
-    }
-    
     public FrameColorNodos() {
         initComponents();
-        cadenas = new FrameInterfaz();
+    }
+
+    /**
+     * Establece la expresion (arbol) que sera dibujada al presionar
+     * "Crear AST". Debe llamarse antes de mostrar la ventana.
+     */
+    public void setDatos(String datos) {
+        this.datos = datos;
     }
 
     /**
@@ -113,28 +112,24 @@ public class FrameColorNodos extends javax.swing.JFrame {
                 .addGap(323, 323, 323)
                 .addComponent(jLabel1)
                 .addGap(0, 0, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addGap(120, 120, 120)
-                .addComponent(jLabel4)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jLabel5)
-                .addGap(148, 148, 148))
             .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(120, 120, 120)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(77, 77, 77)
-                        .addComponent(jLabel2))
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(77, 77, 77)
+                                .addComponent(jLabel2))
+                            .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jTextField1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(147, 147, 147)
-                        .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel3)
-                        .addGap(148, 148, 148))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(168, 168, 168))))
+                        .addComponent(jLabel4)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jLabel5)))
+                .addGap(148, 148, 148))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -216,27 +211,46 @@ public class FrameColorNodos extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
-        
-       
-        
+
+        if (datos == null || datos.trim().isEmpty()) {
+            javax.swing.JOptionPane.showMessageDialog(this,
+                    "Escribe primero una expresion en la ventana principal.",
+                    "Falta expresion", javax.swing.JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
         ArbolIa arbol = new ArbolIa();
-        
-         Nodo arbolExpresi = arbol.crear(datos);
-         //jTextArea1.append(arbol.getReglasEjecutadas());
-         System.out.println(datos);
-         
-         JFrame ventana = new JFrame("Vizualizador de Arboles - LyA2");
-         PanelArbol panelArbol = new PanelArbol(arbolExpresi);
-         
-         
-        Color colorLineas = colorLineasChooser.getColor();
-        Color colorNodos = colorNodosChooser.getColor();
-        anchoLineas = Integer.parseInt(jTextField2.getText().trim());
-        anchoNodos = Integer.parseInt(jTextField1.getText().trim());
-        
-         
-        //panelArbol.setColorLineas(colorLineas);
-        //panelArbol.setColorNodos(colorNodos);
+
+        Nodo arbolExpresi = arbol.crear(datos);
+        System.out.println(arbol.getReglasEjecutadas());
+        System.out.println(datos);
+
+        // Pide por consola (System.in) el valor de cada identificador (id)
+        // encontrado en las hojas del arbol y evalua los operadores de la
+        // pila de caracteres (+,-,*,/,^) con esos valores.
+        arbol.evaluar(arbolExpresi);
+        arbol.mostrarTablaSimbolos();
+
+        PanelArbol panelArbol = new PanelArbol(arbolExpresi);
+
+        // Color de los nodos y de las lineas seleccionados por el usuario
+        Color colorNodos = jColorChooser1.getColor();
+        Color colorLineas = jColorChooser2.getColor();
+
+        // Ancho de nodos y lineas (con valor por defecto si el campo es invalido)
+        try {
+            anchoNodos = Integer.parseInt(jTextField1.getText().trim());
+        } catch (NumberFormatException ex) {
+            anchoNodos = 1;
+        }
+        try {
+            anchoLineas = Integer.parseInt(jTextField2.getText().trim());
+        } catch (NumberFormatException ex) {
+            anchoLineas = 1;
+        }
+
+        panelArbol.setColorNodos(colorNodos);
+        panelArbol.setColorLineas(colorLineas);
         panelArbol.setAnchoLineas(anchoLineas);
         panelArbol.setAnchoNodos(anchoNodos);
 
@@ -246,7 +260,7 @@ public class FrameColorNodos extends javax.swing.JFrame {
         ventanaArbol.setSize(900, 600);
         ventanaArbol.setLocationRelativeTo(null);
         ventanaArbol.setVisible(true);
-         
+
     }//GEN-LAST:event_jButton1ActionPerformed
 
     /**

@@ -5,6 +5,11 @@
 package arbolE;
 
 import java.awt.Image;
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
+import java.util.HashSet;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 
@@ -19,6 +24,9 @@ public class FrameInterfaz extends javax.swing.JFrame {
      */
     FrameColorNodos arbolColor;
      public String datos ;
+    String nPolaca;
+    // 10 de julio
+    int temp;
     
      
    
@@ -56,7 +64,80 @@ public class FrameInterfaz extends javax.swing.JFrame {
         return datos;
     }
     
+    public void inOrden(Nodo n){
+       if(n!=null){
+           inOrden(n.getIzquierdo());
+           jTxtInOrden.append(n.getDato()+"\n");
+           
+           inOrden(n.getDerecho());
+           
+       }  
     
+    }
+    
+    
+    public void postOrden(Nodo n){
+        if(n!=null){
+          postOrden(n.getIzquierdo());
+           postOrden(n.getDerecho());
+           jtxtPostOrden.append(n.getDato()+"\n");
+           
+           
+           
+       } 
+    
+    }
+    
+    
+    public void intermedio(Nodo n){
+      if(n!=null){
+         
+          intermedio(n.getIzquierdo());
+          intermedio(n.getDerecho());
+          
+         if(n.getDerecho()==null && n.getIzquierdo()==null ) {
+             n.setLugar(n.getDato()+ " ");
+             n.setCodigoIntermedio(""); //aqui
+             
+         
+         }else{
+             if(n.getDato().equals("+") || n.getDato().equals("*") || n.getDato().equals("-") || n.getDato().equals("/") ) {
+             temp++;
+              n.setLugar("T"+temp);
+              Nodo izquierdo = n.getIzquierdo();
+              Nodo derecho = n.getDerecho();
+              String codigoI = "";
+              codigoI = izquierdo.getCodigoIntermedio()+" "+derecho.getCodigoIntermedio()+" "+n.getLugar()+" = "+izquierdo.getLugar()
+                      + " "+n.getDato()+ " "+ derecho.getLugar();
+              n.setCodigoIntermedio(codigoI+"\n");
+                 
+             }else{
+                    if(n.getDato().equals("=")){
+                      String codigoI = "";
+                      Nodo izquierdo = n.getIzquierdo();
+                      Nodo derecho = n.getDerecho();
+                      codigoI = derecho.getDato() + " "+ izquierdo.getLugar()+ " "+temp+"\n";
+                      n.setCodigoIntermedio(codigoI);
+                    }// equal =
+             }// equal + - * /
+         
+         }// get derecho
+          
+      }  // n! null
+    
+    }// intermedio 
+    
+    
+    public void preOrden(Nodo n){
+        if(n!=null){
+
+            jtxtPreorden.append(n.getDato()+"\n");
+            nPolaca += jNotacionPolaca.getText()+ n.getDato() + " ";
+            jNotacionPolaca.setText(jNotacionPolaca.getText()+n.getDato()+" ");
+            preOrden(n.getIzquierdo());
+            preOrden(n.getDerecho());
+        }
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -73,7 +154,7 @@ public class FrameInterfaz extends javax.swing.JFrame {
         pato = new javax.swing.JLabel();
         jPanel3 = new javax.swing.JPanel();
         jLabel8 = new javax.swing.JLabel();
-        jTextField2 = new javax.swing.JTextField();
+        jNotacionPolaca = new javax.swing.JTextField();
         jButton2 = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
         jButton4 = new javax.swing.JButton();
@@ -89,11 +170,11 @@ public class FrameInterfaz extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         jTextArea1 = new javax.swing.JTextArea();
         jScrollPane2 = new javax.swing.JScrollPane();
-        jTextArea2 = new javax.swing.JTextArea();
+        jtxtPreorden = new javax.swing.JTextArea();
         jScrollPane3 = new javax.swing.JScrollPane();
-        jTextArea3 = new javax.swing.JTextArea();
+        jTxtInOrden = new javax.swing.JTextArea();
         jScrollPane4 = new javax.swing.JScrollPane();
-        jTextArea4 = new javax.swing.JTextArea();
+        jtxtPostOrden = new javax.swing.JTextArea();
         jLabel3 = new javax.swing.JLabel();
         jScrollPane5 = new javax.swing.JScrollPane();
         jTextArea5 = new javax.swing.JTextArea();
@@ -168,7 +249,7 @@ public class FrameInterfaz extends javax.swing.JFrame {
                 .addGap(19, 19, 19)
                 .addComponent(jLabel8)
                 .addGap(18, 18, 18)
-                .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 181, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jNotacionPolaca, javax.swing.GroupLayout.PREFERRED_SIZE, 181, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(59, 59, 59)
                 .addComponent(jButton2)
                 .addGap(41, 41, 41)
@@ -183,7 +264,7 @@ public class FrameInterfaz extends javax.swing.JFrame {
                 .addContainerGap(21, Short.MAX_VALUE)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel8)
-                    .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jNotacionPolaca, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButton2)
                     .addComponent(jButton3)
                     .addComponent(jButton4))
@@ -227,17 +308,17 @@ public class FrameInterfaz extends javax.swing.JFrame {
         jTextArea1.setRows(5);
         jScrollPane1.setViewportView(jTextArea1);
 
-        jTextArea2.setColumns(20);
-        jTextArea2.setRows(5);
-        jScrollPane2.setViewportView(jTextArea2);
+        jtxtPreorden.setColumns(20);
+        jtxtPreorden.setRows(5);
+        jScrollPane2.setViewportView(jtxtPreorden);
 
-        jTextArea3.setColumns(20);
-        jTextArea3.setRows(5);
-        jScrollPane3.setViewportView(jTextArea3);
+        jTxtInOrden.setColumns(20);
+        jTxtInOrden.setRows(5);
+        jScrollPane3.setViewportView(jTxtInOrden);
 
-        jTextArea4.setColumns(20);
-        jTextArea4.setRows(5);
-        jScrollPane4.setViewportView(jTextArea4);
+        jtxtPostOrden.setColumns(20);
+        jtxtPostOrden.setRows(5);
+        jScrollPane4.setViewportView(jtxtPostOrden);
 
         jLabel3.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jLabel3.setText("Expresiones");
@@ -359,47 +440,59 @@ public class FrameInterfaz extends javax.swing.JFrame {
          String datos = "";
     // temp = 0;
     //Arbol a = new Arbol();
-    ArbolSophia arbolsophia = new ArbolSophia();
+    //ArbolSophia arbolsophia = new ArbolSophia();
+    
+    ArbolIa arbol = new ArbolIa();
     datos = jTextField1.getText();
-
-    Nodo arbolExpresion = arbolsophia.crear(datos);
-    jTextArea1.append(arbolsophia.getReglasEjecutadas());
+    Nodo arbolExpresion = arbol.crear(datos);
+    
+     jTextArea1.append(arbol.getReglasEjecutadas());
+    //Nodo arbolExpresion = arbolsophia.crear(datos);
+    //jTextArea1.append(arbolsophia.getReglasEjecutadas());
         
+        preOrden(arbolExpresion);
+        inOrden(arbolExpresion);
+        postOrden(arbolExpresion);
+        intermedio(arbolExpresion);
+        //String text=" "; 
+        //text = arbol.getReglasEjecutadas();
+        jTextArea5.append(arbolExpresion.getCodigoIntermedio());
+        try {
+            PrintWriter out = new PrintWriter("Reglas_Semanticas.txt");
+         
+            out.println(arbol.getReglasEjecutadas());
+            out.close();
+
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(FrameInterfaz.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
         // TODO add your handling code here:
-        
-        /*String datos = "";
-        
-        
+
+        String datos = jTextField1.getText();
+
         ArbolIa arbol = new ArbolIa();
-        
-        datos = jTextField1.getText();
-        
-         Nodo arbolExpresi = arbol.crear(datos);
-         jTextArea1.append(arbol.getReglasEjecutadas());
-         
-         
-         JFrame ventana = new JFrame("Vizualizador de Arboles - LyA2");
-         PanelArbol panel = new PanelArbol(arbolExpresi);
-         
-         ventana.add(panel);
-         ventana.setSize(600,400);
-         ventana.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-         ventana.setLocationRelativeTo(null);
-         ventana.setVisible(true);*/
-       
-        
+        Nodo arbolExpresion = arbol.crear(datos);
+
+        jTextArea1.append(arbol.getReglasEjecutadas());
+
+        // Pide por consola (System.in) el valor de cada identificador (id)
+        // en las hojas del arbol y evalua los operadores de la pila de
+        // caracteres (+,-,*,/,^) con esos valores.
+        //arbol.evaluar(arbolExpresion);
+
+        // Muestra en el output (consola) las reglas ejecutadas y la tabla de simbolos
+        System.out.println(arbol.getReglasEjecutadas());
+        arbol.mostrarTablaSimbolos();
+
+        preOrden(arbolExpresion);
+
+        // Envia la expresion a la ventana de color/ancho del AST antes de mostrarla
+        arbolColor.setDatos(datos);
         arbolColor.setVisible(true);
-        
-        ArbolIa arbol = new ArbolIa();
-        
-        
-        
-         jTextArea1.append(arbol.getReglasEjecutadas());
-        
-        
     }//GEN-LAST:event_jButton5ActionPerformed
 
     private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
@@ -456,6 +549,7 @@ public class FrameInterfaz extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
+    private javax.swing.JTextField jNotacionPolaca;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
@@ -466,12 +560,11 @@ public class FrameInterfaz extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JScrollPane jScrollPane5;
     private javax.swing.JTextArea jTextArea1;
-    private javax.swing.JTextArea jTextArea2;
-    private javax.swing.JTextArea jTextArea3;
-    private javax.swing.JTextArea jTextArea4;
     private javax.swing.JTextArea jTextArea5;
     private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
+    private javax.swing.JTextArea jTxtInOrden;
+    private javax.swing.JTextArea jtxtPostOrden;
+    private javax.swing.JTextArea jtxtPreorden;
     private javax.swing.JLabel pato;
     private javax.swing.JLabel yo;
     // End of variables declaration//GEN-END:variables

@@ -29,7 +29,11 @@ public class Nodo {
         
         private String codigoIntermedio; //
         private String lugar; // Para los temporales
-        
+
+        // 9 de Julio - valor evaluado del nodo (resultado de la operacion
+        // o valor asignado por el usuario cuando el nodo es un identificador)
+        private String valor;
+
     public Nodo(String dato){ //Información
         this.dato = dato;
     }// Constructor
@@ -90,6 +94,14 @@ public class Nodo {
     public void setLugar(String lugar) {
         this.lugar = lugar;
     }
-    
-    
+
+    public String getValor() {
+        return valor;
+    }
+
+    public void setValor(String valor) {
+        this.valor = valor;
+    }
+
+
 }

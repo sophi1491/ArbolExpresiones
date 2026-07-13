@@ -7,6 +7,7 @@ package arbolE;
 import arbolE.Nodo;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Scanner;
 import java.util.Stack;
 import java.util.StringTokenizer;
 
@@ -38,18 +39,23 @@ HashMap<String,String> producciones;
 
 int paso;
 
-// 1 de Julio 
+// 1 de Julio
 ArrayList <String> reglasEjecutadas;
+
+// 9 de Julio - lectura de valores de identificadores desde consola
+Scanner entrada;
 
 //Construtor
 public ArbolIa(){
-reglasEjecutadas = new ArrayList<>(); 
+reglasEjecutadas = new ArrayList<>();
 tablaSimbolos = new HashMap();
 erroresSemanticos = new HashMap();
 producciones = new HashMap();
 
 ArbolNodo = new Stack<Nodo>();
 caracter = new Stack<String>();
+
+entrada = new Scanner(System.in);
 
 paso = 0;
 } // fin - constructor
@@ -68,9 +74,80 @@ public String getReglasEjecutadas(){
 
 
 public void agregarValex(String lexema,String valor){
-	
+
 
 } // agregarValex - análisis semantico
+
+
+// 8 de Julio - Tabla de Simbolos
+// Imprime en el output (consola) la tabla de simbolos ya construida
+// (con los valores que el usuario proporciono por System.in al evaluar).
+public void mostrarTablaSimbolos(){
+	StringBuilder sb = new StringBuilder("Tabla de Simbolos {");
+	boolean primero = true;
+	for (String clave : tablaSimbolos.keySet()){
+		if(!primero) sb.append(", ");
+		sb.append(clave).append("=").append(tablaSimbolos.get(clave));
+		primero = false;
+	}
+	sb.append("}");
+	System.out.println(sb.toString());
+} // fin mostrarTablaSimbolos
+
+
+// 9 de Julio - Evaluacion del AST
+// Recorre el arbol en postorden: en cada hoja identificador (id) se pregunta
+// por System.in el valor que el usuario le quiere asignar (una sola vez por
+// variable, usando tablaSimbolos como cache); con las hojas ya resueltas se
+// calcula el resultado de cada operador de la pila de caracteres (+,-,*,/,^)
+// y se guarda en Nodo.valor para poder dibujarlo en el AST.
+public int evaluar(Nodo nodo){
+	if(nodo == null) return 0;
+
+	boolean esHoja = nodo.getIzquierdo() == null && nodo.getDerecho() == null;
+
+	if(esHoja){
+		String token = nodo.getDato();
+		int valorNodo;
+		if(token.matches("-?\\d+")){
+			// Es un numero literal
+			valorNodo = Integer.parseInt(token);
+		} else {
+			// Es un identificador (id) se pregunta su valor una sola vez
+			if(!tablaSimbolos.containsKey(token)){
+				System.out.print("Ingrese el valor de la variable '"+token+"': ");
+				String linea = entrada.nextLine();
+				try{
+					Integer.parseInt(linea.trim());
+				}catch(NumberFormatException ex){
+					linea = "0";
+					System.out.println("Valor invalido, se asigna 0 por defecto.");
+				}
+				tablaSimbolos.put(token, linea.trim());
+			}
+			valorNodo = Integer.parseInt(tablaSimbolos.get(token));
+		}
+		nodo.setValor(String.valueOf(valorNodo));
+		return valorNodo;
+	}
+
+	// Nodo operador: primero se resuelven sus hijos (postorden)
+	int izq = evaluar(nodo.getIzquierdo());
+	int der = evaluar(nodo.getDerecho());
+	int resultado;
+
+	switch(nodo.getDato()){
+		case "+": resultado = izq + der; break;
+		case "-": resultado = izq - der; break;
+		case "*": resultado = izq * der; break;
+		case "/": resultado = der != 0 ? izq / der : 0; break;
+		case "^": resultado = (int) Math.pow(izq, der); break;
+		default:  resultado = 0;
+	}
+
+	nodo.setValor(String.valueOf(resultado));
+	return resultado;
+} // fin evaluar
 
 
 public String regresaValex (String lexema){
@@ -106,8 +183,8 @@ public void guardar() {
     
     r = "r" + paso;
     
-        Nodo izquierdo = ArbolNodo.pop();
         Nodo derecho = ArbolNodo.pop();
+        Nodo  izquierdo= ArbolNodo.pop();
         String operador = caracter.pop();
         ArbolNodo.push(new Nodo(operador, izquierdo, derecho));
     
