@@ -45,12 +45,17 @@ ArrayList <String> reglasEjecutadas;
 // 9 de Julio - lectura de valores de identificadores desde consola
 Scanner entrada;
 
+// 10 de Julio - tripletas {op, arg1, arg2} para FrameTripletas, se llenan
+// dentro de guardar() cada vez que se resuelve un operador con sus operandos.
+ArrayList<String[]> tripletas;
+
 //Construtor
 public ArbolIa(){
 reglasEjecutadas = new ArrayList<>();
 tablaSimbolos = new HashMap();
 erroresSemanticos = new HashMap();
 producciones = new HashMap();
+tripletas = new ArrayList<>();
 
 ArbolNodo = new Stack<Nodo>();
 caracter = new Stack<String>();
@@ -59,6 +64,12 @@ entrada = new Scanner(System.in);
 
 paso = 0;
 } // fin - constructor
+
+
+// 10 de Julio - tripletas para FrameTripletas
+public ArrayList<String[]> getTripletas(){
+	return tripletas;
+} // fin getTripletas
 
 
 //**** Reglas Ejecutadas == 1 de julio
@@ -197,6 +208,9 @@ public void guardar() {
 
                 String reglaE = "E.nodo = new Nodo ("+ operador + ",E1.nodo,T.nodo)";
                 reglasEjecutadas.add("p"+paso+" "+reglaE);
+
+                // 10 de Julio - tripleta {op, arg1, arg2} para FrameTripletas
+                tripletas.add(new String[]{ operador, izquierdo.getDato(), derecho.getDato() });
     }
 
 
@@ -254,5 +268,45 @@ public Nodo crear (String expresion){
         return raiz;
 	} // fin metodo crear
 
+
+// 10 de Julio - Conversion de AST a GAD (grafo aciclico dirigido), para
+// PanelGrafo. Unifica hojas repetidas y subexpresiones identicas ya
+// resueltas (mismo operador con los mismos hijos), reasignando los
+// punteros izquierdo/derecho para que compartan el mismo Nodo.
+public Nodo convertirAGAD(Nodo raizAST) {
+    HashMap<String, Nodo> tabla = new HashMap<>();
+    return convertir(raizAST, tabla);
+}
+
+private Nodo convertir(Nodo n, HashMap<String, Nodo> tabla) {
+    if (n == null) return null;
+
+    if (n.getIzquierdo() == null && n.getDerecho() == null) {
+        String clave = "HOJA#" + n.getDato();
+        Nodo existente = tabla.get(clave);
+        if (existente != null) return existente; // reutiliza
+        tabla.put(clave, n);
+        return n;
+    }
+
+    // Procesar hijos primero (post-orden): así al llegar al padre
+    // ya sabemos si los hijos son nodos compartidos o no.
+    Nodo izqNuevo = convertir(n.getIzquierdo(), tabla);
+    Nodo derNuevo = convertir(n.getDerecho(), tabla);
+
+    // Reasignar hijos (puede que ahora apunten a nodos ya existentes)
+    n.setIzquierdo(izqNuevo);
+    n.setDerecho(derNuevo);
+
+    String clave = n.getDato() + "#"
+                 + System.identityHashCode(izqNuevo) + "#"
+                 + System.identityHashCode(derNuevo);
+
+    Nodo existente = tabla.get(clave);
+    if (existente != null) return existente;
+
+    tabla.put(clave, n);
+    return n;
+}
 
 }

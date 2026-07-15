@@ -27,16 +27,24 @@ public class FrameInterfaz extends javax.swing.JFrame {
     String nPolaca;
     // 10 de julio
     int temp;
-    
-     
-   
-     
+
+    // 10 de Julio - integracion de las clases nuevas del equipo
+    FrameCuadruplos cuadruplos;
+    FrameTripletas frameTripletas;
+    // Ultimo arbol construido 
+    private Nodo arbolActual;
+
     public FrameInterfaz() {
         initComponents();
-        
+
         arbolColor = new FrameColorNodos();
+
         
-        
+
+       
+       
+
+
         java.net.URL url2 = getClass().getResource("/arbolE/yo.jpeg"); 
         ImageIcon icon2 = new ImageIcon(url2);
         Image imagenEscalada2 = icon2.getImage().getScaledInstance(
@@ -236,10 +244,25 @@ public class FrameInterfaz extends javax.swing.JFrame {
         jLabel8.setText("Notacio Polaca");
 
         jButton2.setText("Codigo 3 direcciones");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
 
-        jButton3.setText("Clean");
+        jButton3.setText("Cuádruplos");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
 
         jButton4.setText("Tabla de Simbolos");
+        jButton4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton4ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -454,7 +477,13 @@ public class FrameInterfaz extends javax.swing.JFrame {
         inOrden(arbolExpresion);
         postOrden(arbolExpresion);
         intermedio(arbolExpresion);
-        //String text=" "; 
+
+        // 10 de Julio - se guarda el ultimo arbol compilado (ya con su
+        // codigo intermedio calculado por intermedio()) para que otros
+        // botones como "Cuadruplos" lo puedan usar.
+        arbolActual = arbolExpresion;
+
+        //String text=" ";
         //text = arbol.getReglasEjecutadas();
         jTextArea5.append(arbolExpresion.getCodigoIntermedio());
         try {
@@ -491,8 +520,13 @@ public class FrameInterfaz extends javax.swing.JFrame {
 
         preOrden(arbolExpresion);
 
+        // 10 de Julio - se guarda el ultimo arbol construido 
+        arbolActual = arbolExpresion;
+        frameTripletas = new FrameTripletas(arbol.getTripletas());
+        frameTripletas.setVisible(true);
+
         // Envia el arbol ya construido y evaluado a la ventana de color/ancho
-        // del AST antes de mostrarla (no se vuelve a evaluar ahi).
+        // del AST antes de mostrarla .
         arbolColor.setDatos(datos);
         arbolColor.setArbol(arbolExpresion);
         arbolColor.setVisible(true);
@@ -501,6 +535,28 @@ public class FrameInterfaz extends javax.swing.JFrame {
     private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jTextField1ActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        // TODO add your handling code here:]
+        FrameDescripcion ventanaIntermedio = new FrameDescripcion();
+            ventanaIntermedio.setVisible(true);
+    }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        // TODO add your handling code here:
+        if (arbolActual == null) {
+                javax.swing.JOptionPane.showMessageDialog(this,
+                        "Primero presiona 'Compila' con una expresion.",
+                        "Falta expresion", javax.swing.JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+            cuadruplos = new FrameCuadruplos(arbolActual);
+            cuadruplos.setVisible(true);
+    }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton4ActionPerformed
 
     /**
      * @param args the command line arguments

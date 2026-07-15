@@ -19,19 +19,32 @@ public class FramePrincipal extends javax.swing.JFrame {
     
     public FramePrincipal() {
         initComponents();
-        
+
         setLocationRelativeTo(null);
         Interfaz = new FrameInterfaz();
-        
-        java.net.URL url3 = getClass().getResource("/arbolE/logo.jpeg"); 
+
+        java.net.URL url3 = getClass().getResource("/arbolE/logo.jpeg");
         ImageIcon icon3 = new ImageIcon(url3);
         Image imagenEscalada3 = icon3.getImage().getScaledInstance(
                 100,
                 100,
                 Image.SCALE_AREA_AVERAGING
-        ); 
-        
+        );
+
         pato.setIcon(new ImageIcon(imagenEscalada3));
+
+        // 10 de Julio - boton "Asignacion Individual" (SSA), agregado sin
+        // tocar el GroupLayout generado: se reemplaza el layout de jPanel3
+        // (donde ya vive "Salir") por un FlowLayout simple y se agrega el
+        // nuevo boton junto al existente.
+        javax.swing.JButton btnAsignacionIndividual = new javax.swing.JButton("Asignacion Individual");
+        jPanel3.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.RIGHT, 15, 12));
+        jPanel3.add(btnAsignacionIndividual);
+        jPanel3.add(jButton10);
+        btnAsignacionIndividual.addActionListener(evt -> {
+            SSADiagrama ventana = new SSADiagrama();
+            ventana.setVisible(true);
+        });
     }
 
     /**
@@ -142,6 +155,11 @@ public class FramePrincipal extends javax.swing.JFrame {
         });
 
         jButton3.setText("Optimizacion");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
 
         jButton4.setText("Reglas Semanticas");
         jButton4.addActionListener(new java.awt.event.ActionListener() {
@@ -160,6 +178,11 @@ public class FramePrincipal extends javax.swing.JFrame {
         jButton6.setText("Validacion Metodos");
 
         jButton7.setText("Codigo Intermedio");
+        jButton7.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton7ActionPerformed(evt);
+            }
+        });
 
         jButton8.setText("N Polaca");
 
@@ -272,6 +295,14 @@ public class FramePrincipal extends javax.swing.JFrame {
         // TODO add your handling code here:
         Interfaz.setVisible(true);
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton7ActionPerformed
 
     /**
      * @param args the command line arguments

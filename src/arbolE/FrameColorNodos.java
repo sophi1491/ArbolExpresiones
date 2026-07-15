@@ -28,6 +28,56 @@ public class FrameColorNodos extends javax.swing.JFrame {
      */
     public FrameColorNodos() {
         initComponents();
+
+        // 10 de Julio - boton "Ver GAD" (grafo aciclico dirigido), agregado
+        // sin tocar el GroupLayout generado: se reemplaza el layout de
+        // jPanel3 (donde ya vive "Crear AST") por un FlowLayout simple y se
+        // agrega el nuevo boton junto al existente.
+        javax.swing.JButton btnVerGad = new javax.swing.JButton("Ver GAD");
+        btnVerGad.setFont(new java.awt.Font("Helvetica Neue", 1, 14));
+        jPanel3.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.RIGHT, 15, 10));
+        jPanel3.add(btnVerGad);
+        jPanel3.add(jButton1);
+        btnVerGad.addActionListener(evt -> btnVerGadActionPerformed());
+    }
+
+    private void btnVerGadActionPerformed() {
+        if (raiz == null) {
+            javax.swing.JOptionPane.showMessageDialog(this,
+                    "Escribe primero una expresion en la ventana principal.",
+                    "Falta expresion", javax.swing.JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        // El GAD (grafo aciclico dirigido) se obtiene uniendo hojas y
+        // subexpresiones repetidas del arbol ya evaluado.
+        Nodo gad = new ArbolIa().convertirAGAD(raiz);
+
+        Color colorNodo = jColorChooser1.getColor();
+        Color colorLinea = jColorChooser2.getColor();
+
+        int radioNodo;
+        try {
+            radioNodo = Math.max(20, Integer.parseInt(jTextField1.getText().trim()));
+        } catch (NumberFormatException ex) {
+            radioNodo = 20;
+        }
+
+        float grosorLinea;
+        try {
+            grosorLinea = Math.max(1, Integer.parseInt(jTextField2.getText().trim()));
+        } catch (NumberFormatException ex) {
+            grosorLinea = 1f;
+        }
+
+        PanelGrafo panel = new PanelGrafo(gad, colorNodo, radioNodo, colorLinea, grosorLinea);
+
+        JFrame ventanaGad = new JFrame("Grafo Aciclico Dirigido (GAD)");
+        ventanaGad.add(panel);
+        ventanaGad.setSize(900, 600);
+        ventanaGad.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        ventanaGad.setLocationRelativeTo(null);
+        ventanaGad.setVisible(true);
     }
 
     /**
