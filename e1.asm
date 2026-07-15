@@ -1,0 +1,14 @@
+; GONZALEZ ZAPETE SOPHIA 
+.MODEL SMALL 
+.STACK
+.DATA
+a dw 1
+b dw 2
+.CODE 
+MOV AX,@DATA 
+MOV DS,AX
+
+mov ax amov bx b
+ MOV AX,4C00H 
+ INT 21H 
+ END

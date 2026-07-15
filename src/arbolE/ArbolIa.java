@@ -39,6 +39,14 @@ HashMap<String,String> producciones;
 
 int paso;
 
+// 15 de julio
+
+public String emu8086 = "; GONZALEZ ZAPETE SOPHIA \n"
+        + ".MODEL SMALL \n"
+        + ".STACK\n"
+        + ".DATA\n";
+
+public int valorNodo;
 // 1 de Julio
 ArrayList <String> reglasEjecutadas;
 
@@ -119,7 +127,7 @@ public int evaluar(Nodo nodo){
 
 	if(esHoja){
 		String token = nodo.getDato();
-		int valorNodo;
+		//int valorNodo;
 		if(token.matches("-?\\d+")){
 			// Es un numero literal
 			valorNodo = Integer.parseInt(token);
@@ -146,6 +154,7 @@ public int evaluar(Nodo nodo){
 			valorNodo = Integer.parseInt(tablaSimbolos.get(token));
 		}
 		nodo.setValor(String.valueOf(valorNodo));
+                emu8086 +=  token + " dw " + valorNodo+"\n";
 		return valorNodo;
 	}
 
@@ -238,6 +247,9 @@ public Nodo crear (String expresion){
 		if (aritmeticos.indexOf(token) < 0){
 		 // 6. Extrae de la pila los términos que estaba
 			ArbolNodo.push(new Nodo(token));
+                        
+                        
+                        
 			paso++;
                         String regla = "T.nodo = new Hoja(id<"+token+">,id.entrada_"+token+") ";
                         reglasEjecutadas.add("p" + paso + " "+regla);
@@ -265,6 +277,7 @@ public Nodo crear (String expresion){
                 raiz = ArbolNodo.peek();
             }
         } // fin while !caracter.empty
+           
         return raiz;
 	} // fin metodo crear
 

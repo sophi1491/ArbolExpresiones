@@ -5,13 +5,19 @@
 package arbolE;
 
 import java.awt.Image;
+import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileWriter;
 import java.io.PrintWriter;
 import java.util.HashSet;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
+import static javax.swing.JOptionPane.showMessageDialog;
 
 /**
  *
@@ -27,6 +33,11 @@ public class FrameInterfaz extends javax.swing.JFrame {
     String nPolaca;
     // 10 de julio
     int temp;
+    
+    // 15 de julio
+    String Izquierdo,derecho;
+    String emulocal = "\n";
+    int Contador = 0;
 
     // 10 de Julio - integracion de las clases nuevas del equipo
     FrameCuadruplos cuadruplos;
@@ -39,7 +50,7 @@ public class FrameInterfaz extends javax.swing.JFrame {
 
         arbolColor = new FrameColorNodos();
 
-        
+        Izquierdo = derecho =  "";
 
        
        
@@ -67,6 +78,42 @@ public class FrameInterfaz extends javax.swing.JFrame {
     }
 
     
+    public void generaEmutasm(String emu, int i){
+        try{
+            FileWriter escritor = new FileWriter("e"+i+".asm");
+            escritor.write(emu);
+            escritor.close();
+            System.out.println("Archivo creado exitosamente");
+        }
+        catch(Exception e){
+            System.out.println("Ha ocurrido un error al crear el archivo");
+        }
+    }
+    
+    public void sonido(){
+  
+    try {
+        File sonido = new File ("/Users/sophiazapete/Verano 2026/Automatas II/Proyecto Arbol/ArbolExpresiones/src/arbolE/new-notification-022-370046.wav");
+        if (sonido.exists()) {
+            AudioInputStream audioStream = AudioSystem.getAudioInputStream(sonido);
+            Clip clip = AudioSystem.getClip();
+            clip.open(audioStream);
+            clip.start(); 
+        } else {
+            showMessageDialog(null, "No se encontró el archivo de sonido.");
+        }
+    } catch (Exception e) {
+        e.printStackTrace();
+        showMessageDialog(null, "Error al reproducir el sonido.");
+    }
+    }//sonido
+    
+    
+    
+    
+    
+    
+    
     public String cadena(String datos){
         datos = jTextField1.getText();
         return datos;
@@ -79,6 +126,38 @@ public class FrameInterfaz extends javax.swing.JFrame {
            
            inOrden(n.getDerecho());
            
+           
+           //15 julio
+           
+            
+            switch (n.getDato()) {
+                case "+": System.out.println("ADD Gonzalez Zapete Sophia");
+                Izquierdo = n.getIzquierdo().getDato();
+                derecho = n.getDerecho().getDato();
+                
+                    System.out.println("izq: "+Izquierdo);
+                    System.out.println("der: "+derecho);
+                    emulocal +=  "mov ax "+ n.getIzquierdo().getDato();
+                    emulocal +=  "mov bx "+ n.getDerecho().getDato();
+                
+                break;
+                
+                
+                case "-": System.out.println("sub");
+                Izquierdo = n.getIzquierdo().getDato();
+                derecho = n.getDerecho().getDato();
+                break;
+                
+                case "/": System.out.println("div");
+                Izquierdo = n.getIzquierdo().getDato();
+                derecho = n.getDerecho().getDato();
+                break;
+                
+                case "*": System.out.println("mul"); 
+                Izquierdo = n.getIzquierdo().getDato();
+                derecho = n.getDerecho().getDato();
+                break;
+            }// fin switch
        }  
     
     }
@@ -507,7 +586,7 @@ public class FrameInterfaz extends javax.swing.JFrame {
         Nodo arbolExpresion = arbol.crear(datos);
 
         jTextArea1.append(arbol.getReglasEjecutadas());
-
+        
         // Pide por consola (System.in) el valor de cada identificador (id)
         // en las hojas del arbol y evalua los operadores de la pila de
         // caracteres (+,-,*,/,^) con esos valores. Esta es la UNICA vez que
@@ -530,6 +609,22 @@ public class FrameInterfaz extends javax.swing.JFrame {
         arbolColor.setDatos(datos);
         arbolColor.setArbol(arbolExpresion);
         arbolColor.setVisible(true);
+        
+        preOrden(arbolExpresion);
+        inOrden(arbolExpresion);
+        postOrden(arbolExpresion);
+        intermedio(arbolExpresion);
+        // 15 de julio
+        // creamos la variabe emu la cual guarda el texto en ensamblador de la suma
+        // 
+        arbol.emu8086+=".CODE \n"+"MOV AX,@DATA \n"+"MOV DS,AX\n";
+        String finalEmu =  arbol.emu8086 + this.emulocal;
+        finalEmu += "\n MOV AX,4C00H \n "+"INT 21H \n END";
+        showMessageDialog(null,finalEmu);
+        Contador ++;
+        generaEmutasm(finalEmu,Contador);
+        sonido();
+        
     }//GEN-LAST:event_jButton5ActionPerformed
 
     private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed

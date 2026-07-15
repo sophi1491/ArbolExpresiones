@@ -13,6 +13,8 @@ import java.util.StringTokenizer;
  *
  * @author sophi
  */
+
+
 public class Arbol {
     //Atributos
     Stack<Nodo> ArbolNodo; //pila semantica
@@ -38,6 +40,13 @@ int paso;
 
 // 1 de Julio 
 ArrayList <String> reglasEjecutadas;
+
+// 15 de julio
+
+public String emu8086 = "; GONZALEZ ZAPETE SOPHIA "
+        + ".MODEL SMALL \n"
+        + ".STACK\n"
+        + ".DATA\n";
 
 //Construtor
 public Arbol(){
