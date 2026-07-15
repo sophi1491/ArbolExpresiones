@@ -116,14 +116,21 @@ public class PanelArbol extends JPanel {
         Stroke trazoLineas = new BasicStroke(anchoLineas);
 
         // Lineas hacia los hijos IZQUIERDO Y DERECHO
-        g.setStroke(trazoLineas);
-        g.setColor(colorLineas);
+        // el stroke/color se debe restablecer antes de CADA linea, ya
+        // que dibujar el subarbol izquierdo (rectangulos, textos, etc.)
+        // cambia el stroke/color del Graphics2D y si no se restaura, la
+        // linea derecha se dibuja con el ultimo stroke/color usado adentro
+        // de esa recursion .
         if (nodo.getIzquierdo() != null) {
+            g.setStroke(trazoLineas);
+            g.setColor(colorLineas);
             g.drawLine(x, y, x - espacioHorizontal, y + ESPACIO_VERTICAL);
             dibujarNodo(g, nodo.getIzquierdo(), x - espacioHorizontal,
                     y + ESPACIO_VERTICAL, espacioHorizontal / 2);
         }
         if (nodo.getDerecho() != null) {
+            g.setStroke(trazoLineas);
+            g.setColor(colorLineas);
             g.drawLine(x, y, x + espacioHorizontal, y + ESPACIO_VERTICAL);
             dibujarNodo(g, nodo.getDerecho(), x
                     + espacioHorizontal, y + ESPACIO_VERTICAL, espacioHorizontal / 2);

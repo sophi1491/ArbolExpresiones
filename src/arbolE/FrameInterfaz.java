@@ -481,8 +481,9 @@ public class FrameInterfaz extends javax.swing.JFrame {
 
         // Pide por consola (System.in) el valor de cada identificador (id)
         // en las hojas del arbol y evalua los operadores de la pila de
-        // caracteres (+,-,*,/,^) con esos valores.
-        //arbol.evaluar(arbolExpresion);
+        // caracteres (+,-,*,/,^) con esos valores. Esta es la UNICA vez que
+        // se pregunta: el arbol ya evaluado se le pasa a FrameColorNodos.
+        arbol.evaluar(arbolExpresion);
 
         // Muestra en el output (consola) las reglas ejecutadas y la tabla de simbolos
         System.out.println(arbol.getReglasEjecutadas());
@@ -490,8 +491,10 @@ public class FrameInterfaz extends javax.swing.JFrame {
 
         preOrden(arbolExpresion);
 
-        // Envia la expresion a la ventana de color/ancho del AST antes de mostrarla
+        // Envia el arbol ya construido y evaluado a la ventana de color/ancho
+        // del AST antes de mostrarla (no se vuelve a evaluar ahi).
         arbolColor.setDatos(datos);
+        arbolColor.setArbol(arbolExpresion);
         arbolColor.setVisible(true);
     }//GEN-LAST:event_jButton5ActionPerformed
 

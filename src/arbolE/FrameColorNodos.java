@@ -18,6 +18,11 @@ public class FrameColorNodos extends javax.swing.JFrame {
     int anchoNodos = 0;
     public  String datos;
 
+    // 10 de Julio - arbol ya construido y evaluado (con los valores que el
+    // usuario ya dio por consola) que se recibe desde FrameInterfaz, para no
+    // volver a preguntar los valores de las variables al abrir esta ventana.
+    private Nodo raiz;
+
     /**
      * Creates new form FrameColorNodos
      */
@@ -31,6 +36,15 @@ public class FrameColorNodos extends javax.swing.JFrame {
      */
     public void setDatos(String datos) {
         this.datos = datos;
+    }
+
+    /**
+     * Recibe el arbol ya construido y evaluado (Nodo.getValor() ya
+     * calculado) para dibujarlo directamente, sin volver a pedir los
+     * valores de los identificadores por consola.
+     */
+    public void setArbol(Nodo raiz) {
+        this.raiz = raiz;
     }
 
     /**
@@ -212,26 +226,16 @@ public class FrameColorNodos extends javax.swing.JFrame {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
 
-        if (datos == null || datos.trim().isEmpty()) {
+        if (raiz == null) {
             javax.swing.JOptionPane.showMessageDialog(this,
                     "Escribe primero una expresion en la ventana principal.",
                     "Falta expresion", javax.swing.JOptionPane.WARNING_MESSAGE);
             return;
         }
 
-        ArbolIa arbol = new ArbolIa();
-
-        Nodo arbolExpresi = arbol.crear(datos);
-        System.out.println(arbol.getReglasEjecutadas());
-        System.out.println(datos);
-
-        // Pide por consola (System.in) el valor de cada identificador (id)
-        // encontrado en las hojas del arbol y evalua los operadores de la
-        // pila de caracteres (+,-,*,/,^) con esos valores.
-        arbol.evaluar(arbolExpresi);
-        arbol.mostrarTablaSimbolos();
-
-        PanelArbol panelArbol = new PanelArbol(arbolExpresi);
+        // El arbol ya viene construido y evaluado desde FrameInterfaz
+        // (asi no se vuelve a preguntar por consola los valores
+        PanelArbol panelArbol = new PanelArbol(raiz);
 
         // Color de los nodos y de las lineas seleccionados por el usuario
         Color colorNodos = jColorChooser1.getColor();
