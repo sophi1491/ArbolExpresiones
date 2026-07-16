@@ -1,0 +1,27 @@
+; GONZALEZ ZAPETE SOPHIA  indigo2.ASM
+.MODEL SMALL
+.STACK
+.DATA
+    MANSAJE DB 'Hola Indigo Como estas' ;LONG 14
+    
+.CODE     
+
+    MOV AX,@DATA
+    MOV DS,AX  
+    
+    MOV SI,0 ;INDICE  
+    MOV CX,22 
+    MOV DX,2040H ;NUMERO DE PUERTO INICIAL LCD 
+    
+LABEL01:
+    MOV AL,MANSAJE[SI]
+    OUT DX,AL  ;ENVIAR HACIA EL PUERTO EL CONTENIDO DE <AL>
+    INC SI
+    INC DX
+    LOOP LABEL01 
+     
+    MOV AX,4C00H
+    INT 21H
+    
+    
+END
