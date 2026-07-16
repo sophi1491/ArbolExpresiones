@@ -80,10 +80,18 @@ public class FrameInterfaz extends javax.swing.JFrame {
     
     public void generaEmutasm(String emu, int i){
         try{
-            FileWriter escritor = new FileWriter("e"+i+".asm");
+            String nombreArchivo = "e" + i + ".asm";
+            FileWriter escritor = new FileWriter(nombreArchivo);
             escritor.write(emu);
             escritor.close();
             System.out.println("Archivo creado exitosamente");
+            
+            File archivo = new File(nombreArchivo);
+            String rutaEmu8086 = "C:\\emu8086\\emu8086.exe"; 
+
+            String rutaAbsoluta = archivo.getAbsolutePath();
+
+            Runtime.getRuntime().exec(new String[]{rutaEmu8086, rutaAbsoluta});
         }
         catch(Exception e){
             System.out.println("Ha ocurrido un error al crear el archivo");
